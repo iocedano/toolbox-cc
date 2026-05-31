@@ -5,7 +5,7 @@
  * @returns {Object[]} Rows keyed by header names
  */
 function parseCsv(csvString) {
-  if (!csvString || typeof csvString !== 'string' || csvString.trim() === '') {
+  if (!csvString || csvString.trim() === '') {
     return [];
   }
 

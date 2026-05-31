@@ -1,0 +1,16 @@
+.navbar-component {
+    background-color: #ff6666;
+}
+
+.navbar-component .navbar-brand {
+    color: #fff;
+    font-weight: bold;
+}
+
+.container {
+    margin-bottom: 20px;
+}
+
+.container .form-select {
+    width: 200px;
+}
