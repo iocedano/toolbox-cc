@@ -1,0 +1,4 @@
+{
+  "spec": "src/**/*.test.js",
+  "require": ["dotenv/config", "./test/setup-chai.js"]
+}
