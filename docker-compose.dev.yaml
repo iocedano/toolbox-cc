@@ -1,0 +1,24 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.Dev
+    ports:
+      - 3002:3002
+    env_file:
+      - ./api/.env
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.Dev
+    ports:
+      - 3000:3000
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/opt/app-frontend
+    command: npm run dev
+    depends_on:
+      - api

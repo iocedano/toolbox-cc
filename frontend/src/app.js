@@ -1,37 +1,32 @@
+import { useState, useEffect } from 'react';
 import { Container, Navbar} from 'react-bootstrap';
 import Table from './components/Table';
 import FileLine from './components/Table/components/TableFileRow';
 import Select from './components/FormSelect';
+import { default as filesApi } from './api/files';
 import './app.css';
 
 function App() {
-    const files = [
-        {
-            "file": "test9.csv",
-            "lines": [
-                {
-                    "text": "BAeYrXxjSMagMWySEEhUxsHLCPFvj",
-                    "number": "47839894",
-                    "hex": "3d9ca557aa605439f6b17e7b02fb01bd"
-                },
-                {
-                    "text": "wDMppuqVmsMKvNEMBZCslijGpb",
-                    "number": "082215",
-                    "hex": "1dac097edda7a96a4b619628809c6f40"
-                },
-            ]
-        }
-    ];
+    const [filesList, setFilesList] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [selectedFile, setSelectedFile] = useState('');
 
-    const filesList = [
-       "test9.csv",
-       "test10.csv",
-       "test11.csv",
-       "test12.csv",
-       "test13.csv",
-       "test14.csv",
-       "test15.csv",
-    ];
+    useEffect(() => {
+        filesApi.getListOfFiles().then(data => {
+            setFilesList(data.files);
+        });
+    }, []);
+
+    useEffect(() => {
+        filesApi.getFilesData(selectedFile).then(data => {
+            setFiles(data);
+        });
+    }, [selectedFile]);
+
+    const onSelectFile = (event) => {
+        const file = event.target.value;
+        setSelectedFile(file === 'all' ? '' : file);
+    }
 
     const headers = ['File Name', 'Text', 'Number', 'Hex'];
 
@@ -44,14 +39,14 @@ function App() {
             </Navbar>
 
             <Container>
-                <Select options={filesList} includeAll={true} onChange={() => {}} />
+                <Select options={filesList} includeAll={true} onChange={onSelectFile} />
             </Container>
 
             <Container>
                 <Table headers={headers}>
                     {files.map((file) => (
                         file.lines.map((line) => (
-                            <FileLine key={file.file} fileName={file.file} text={line.text} number={line.number} hex={line.hex} />
+                            <FileLine key={line.hex} fileName={file.file} text={line.text} number={line.number} hex={line.hex} />
                         ))
                     ))}
                 </Table>

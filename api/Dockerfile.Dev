@@ -1,0 +1,13 @@
+# api/Dockerfile.Dev
+FROM node:14-alpine
+
+WORKDIR /opt/app-api
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE ${PORT}
+
+CMD ["npm", "run", "dev"]

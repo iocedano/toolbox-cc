@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.js',
@@ -10,9 +11,14 @@ module.exports = {
   },
   mode: 'development',
   devServer: {
-    port: 3000,
+    port: process.env.PORT || 3000,
     hot: true,
     open: true,
+    host: '0.0.0.0',
+    allowedHosts: 'all',
+    client: {
+      webSocketURL: 'ws://localhost:3000/ws', 
+    },
   },
   module: {
     rules: [
@@ -35,6 +41,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
+    }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
     }),
   ],
 };
