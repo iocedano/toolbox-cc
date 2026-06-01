@@ -1,4 +1,5 @@
 const fetch = require('../tools/fetch');
+const parseCsv = require('../tools/parse-csv');
 const downloadCsv = require('../tools/download-csv');
 
 /**
@@ -28,6 +29,10 @@ async function getData(req, res, next) {
         const data = await Promise.allSettled(filesResponse.files.map(async (file) => {
             const fileLines = await downloadCsv(`${process.env.API_URL}/secret/file/${file}`, {
                 headers: headers
+            })
+            .then(data => parseCsv(data, { ignoreLinesWithErrors: true, ignoreColumns: ['file'] }))
+            .catch(error => {
+                reject(error);
             });
 
             return {
