@@ -22,7 +22,7 @@ function downloadCsv(url, options = {}) {
       res.on('data', (chunk) => chunks.push(chunk));
       res.on('end', () => {
         const body = Buffer.concat(chunks).toString('utf8');
-        resolve(parseCsv(body));
+        resolve(body);
       });
     });
 

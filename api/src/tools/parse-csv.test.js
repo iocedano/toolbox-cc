@@ -22,7 +22,7 @@ file1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5
 file1.csv,PNzRfORtKtEDOzmIVrQuSh,74088708,3e29651a63a5202a5661e05a060401fb
 file1.csv,d,6173,f9e1bcdb9e3784acc448af34f4727252`;
 
-    expect(parseCsv(csv)).to.deep.equal([
+    expect(parseCsv(csv, { ignoreColumns: ['file'] })).to.deep.equal([
       {
         // file: 'file1.csv',
         text: 'RgTya',
@@ -65,7 +65,7 @@ file1.csv,d,6173,f9e1bcdb9e3784acc448af34f4727252`;
 file1.csv,RgTya,64075909
 file1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5`;
 
-    expect(parseCsv(csv)).to.deep.equal([
+    expect(parseCsv(csv, { ignoreColumns: ['file'] })).to.deep.equal([
       {
         // file: 'file1.csv',
         text: 'AtjW',
@@ -80,7 +80,7 @@ file1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5`;
 file1.csv,RgTya,64075909,70ad29aacf0b690b0467fe2b2767f765,extra
 file1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5`;
 
-    expect(parseCsv(csv)).to.deep.equal([
+    expect(parseCsv(csv, { ignoreColumns: ['file'] })).to.deep.equal([
       {
         // file: 'file1.csv',
         text: 'AtjW',
@@ -98,7 +98,7 @@ file1.csv,RgTya,64075909,70ad29aacf0b690b0467fe2b2767f765
 file1.csv,broken,row
 file1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5`;
 
-    expect(parseCsv(csv)).to.deep.equal([
+    expect(parseCsv(csv, { ignoreColumns: ['file'] })).to.deep.equal([
       {
         // file: 'file1.csv',
         text: 'RgTya',
@@ -119,6 +119,30 @@ file1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5`;
 file1.csv,incomplete
 another,broken,line`;
 
-    expect(parseCsv(csv)).to.deep.equal([]);
+    expect(parseCsv(csv, { ignoreColumns: ['file'] })).to.deep.equal([]);
+  });
+
+  it('keeps file column by default when ignoreColumns is not provided', () => {
+    const csv = `file,text,number,hex
+file1.csv,RgTya,64075909,70ad29aacf0b690b0467fe2b2767f765`;
+
+    expect(parseCsv(csv)).to.deep.equal([
+      {
+        file: 'file1.csv',
+        text: 'RgTya',
+        number: '64075909',
+        hex: '70ad29aacf0b690b0467fe2b2767f765',
+      },
+    ]);
+  });
+
+  it('filters empty values when ignoreLinesWithErrors is true', () => {
+    const csv = `file,text,number,hex
+file1.csv,,64075909,70ad29aacf0b690b0467fe2b2767f765`;
+
+    expect(parseCsv(csv, {
+      ignoreLinesWithErrors: true,
+      ignoreColumns: ['file'],
+    })).to.deep.equal([]);
   });
 });

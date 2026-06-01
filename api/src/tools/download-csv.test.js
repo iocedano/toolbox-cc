@@ -51,29 +51,11 @@ describe('downloadCsv', () => {
     ).to.be.rejectedWith(/Download failed with status 404/);
   });
 
-  it('returns parsed rows when download succeeds', async () => {
-    const body = `file,text,number,hex
-file1.csv,RgTya,64075909,70ad29aacf0b690b0467fe2b2767f765`;
-
-    const get = createMockGet({ statusCode: 200, body });
-
-    const rows = await downloadCsv('http://example.com/file.csv', { get });
-
-    expect(rows).to.deep.equal([
-      {
-        // file: 'file1.csv',
-        text: 'RgTya',
-        number: '64075909',
-        hex: '70ad29aacf0b690b0467fe2b2767f765',
-      },
-    ]);
-  });
-
-  it('returns empty array when downloaded file is empty', async () => {
+  it('returns empty string when downloaded file is empty', async () => {
     const get = createMockGet({ statusCode: 200, body: '' });
 
-    const rows = await downloadCsv('http://example.com/empty.csv', { get });
+    const body = await downloadCsv('http://example.com/empty.csv', { get });
 
-    expect(rows).to.deep.equal([]);
+    expect(body).to.deep.equal('');
   });
 });
