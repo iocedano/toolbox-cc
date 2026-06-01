@@ -10,7 +10,7 @@ make frontend-init
 
 # Run (two terminals)
 ```bash
-make api-run-dev      # http://localhost:3002 (or PORT from api/.env)
+make api-run-dev      # http://localhost:3001 (or PORT from api/.env)
 make frontend-run-dev # http://localhost:3000
 ```
 
