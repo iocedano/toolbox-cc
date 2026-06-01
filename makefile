@@ -1,3 +1,5 @@
+#
+
 api-init:
 	cd api && source $(HOME)/.nvm/nvm.sh && nvm use && npm install
 
@@ -22,3 +24,6 @@ test:
 
 run:
 	docker compose -f docker-compose.dev.yaml up
+
+down:
+	docker compose -f docker-compose.dev.yaml down --rmi all

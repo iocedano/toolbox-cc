@@ -21,12 +21,6 @@ function parseCsv(csvString) {
   const headers = lines[0].split(',');
 
   return lines.slice(1).reduce((rows, line) => {
-    /**
-     * Tener en cuenta que:
-- Pueden existir archivos vacíos y líneas con error (que no tenga la cantidad de datos suficientes).
-- Si una línea tiene error se debe descartar la misma.
-- También pueden existir errores al descargar un archivo.
-     */
     // @TODO: Could be a callback to handle lines : allowing the function to be more flexible
     const values = line.split(',').filter(Boolean);
 
