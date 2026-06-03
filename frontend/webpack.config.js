@@ -9,7 +9,7 @@ module.exports = {
     filename: 'bundle.js',
     clean: true,
   },
-  mode: 'development',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devServer: {
     port: process.env.PORT || 3000,
     hot: true,
