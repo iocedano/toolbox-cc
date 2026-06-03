@@ -37,5 +37,3 @@ make run-prod
 
 # App: http://localhost
 ```
-
-Build args: frontend uses empty `API_URL` so the browser calls `/api/files/list` and `/api/files/data` on port 80.
