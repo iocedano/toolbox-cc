@@ -8,6 +8,6 @@ const app = express();
 app.use(cors());
 app.use(middleware.validateHeaders);
 
-app.use('/', routes);
+app.use('/api', routes);
 
 module.exports = app;

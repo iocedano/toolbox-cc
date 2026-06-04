@@ -1,0 +1,41 @@
+services:
+  api:
+    image: toolbox-cc-api-prod
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    env_file:  
+      - api/.env
+    environment:
+      PORT: 3002
+      NODE_ENV: production
+      API_URL: https://echo-serv.tbxnet.com/v1
+    expose:
+      - "3002"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get({hostname:'127.0.0.1',port:3002,path:'/api/health',headers:{Accept:'application/json'}},(r)=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    restart: unless-stopped
+
+  frontend:
+    image: toolbox-cc-frontend-prod
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

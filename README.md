@@ -26,3 +26,14 @@ make run
 docker compose -f docker-compose.dev.yaml up --build
 
 ```
+
+### Option B — Production (API + Nginx frontend)
+
+Nginx serves the React build and proxies `/api/*` to the API container (same origin, no CORS).
+
+```bash
+# From repo root; set SUPER_SECRET_KEY in api/.env or shell
+make run-prod
+
+# App: http://localhost
+```
