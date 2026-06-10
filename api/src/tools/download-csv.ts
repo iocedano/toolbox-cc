@@ -1,5 +1,7 @@
-const https = require('https');
-const parseCsv = require('./parse-csv');
+import https from 'https';
+``
+type FetchOptions = https.RequestOptions & { get?: typeof https.get };
+
 
 /**
  * Downloads a CSV file from a URL and parses its contents.
@@ -7,22 +9,23 @@ const parseCsv = require('./parse-csv');
  * @param {{ get?: Function }} [options] - Optional http(s).get for testing
  * @returns {Promise<Object[]>}
  */
-function downloadCsv(url, options = {}) {
-  const request = options.get || https.get;
+function downloadCsv(url:string, options: FetchOptions = {}): Promise<string> {
+  const { get, ...requestOptions } = options;
+  const request = get || https.get;
   
   return new Promise((resolve, reject) => {
-    const req = request(url, options, (res) => {
-      if (res.statusCode >= 400) {
+    const req = request(url, requestOptions, (res) => {
+      if (res.statusCode && res.statusCode >= 400) {
         res.resume();
         reject(new Error(`Download failed with status ${res.statusCode}`));
         return;
       }
 
-      const chunks = [];
+      const chunks: Buffer[] = [];
       res.on('data', (chunk) => chunks.push(chunk));
       res.on('end', () => {
         const body = Buffer.concat(chunks).toString('utf8');
-        resolve(parseCsv(body));
+        resolve(body);
       });
     });
 
@@ -30,4 +33,4 @@ function downloadCsv(url, options = {}) {
   });
 }
 
-module.exports = downloadCsv;
+export default downloadCsv;

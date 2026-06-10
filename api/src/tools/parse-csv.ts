@@ -4,7 +4,7 @@
  * @param {string} csvString - The CSV string to parse
  * @returns {Object[]} Rows keyed by header names
  */
-function parseCsv(csvString) {
+function parseCsv<T>(csvString: string): T[] {
   if (!csvString || csvString.trim() === '') {
     return [];
   }
@@ -18,29 +18,28 @@ function parseCsv(csvString) {
     return [];
   }
 
-  const headers = lines[0].split(',');
+  const headers = lines[0].split(',') as (keyof T)[];
 
-  return lines.slice(1).reduce((rows, line) => {
-    // @TODO: Could be a callback to handle lines : allowing the function to be more flexible
+  return lines.slice(1).reduce((rows: T[], line) => {
     const values = line.split(',').filter(Boolean);
 
     if (values.length !== headers.length) {
       return rows;
     }
 
-    const row = headers.reduce((acc, header, index) => {
+    const row = headers.reduce((acc: T, header: keyof T, index: number) => {
       // @TODO: Allow custom data column exclusion
-      if (header.toLowerCase() === 'file') { //  not useful for other file types --
+      if (typeof header === 'string' && header.toLowerCase() === 'file') { //  not useful for other file types --
         return acc;
       }
-      acc[header] = values[index];
+      acc[header] = values[index] as T[keyof T];
       return acc;
-    }, {});
+    }, {} as T);
 
     rows.push(row);
     return rows;
-  }, []);
+  }, [] as T[]);
 }
 
 
-module.exports = parseCsv;
+export default parseCsv;

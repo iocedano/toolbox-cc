@@ -2,11 +2,18 @@
   "name": "code-challenge-api",
   "version": "1.0.0",
   "description": "API for code challenge",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js --env-file=.env --verbose",
-    "test": "npx mocha"
+    "start": "node dist/app.js",
+    "test": "npm run ts-check && npx mocha",
+    "tsc": "tsc",
+    "ts-check": "tsc --noEmit",
+    "ts-dev": "tsc --watch",
+    "build": "rm -rf dist && tsc" ,
+    "dev:build": "rm -rf dist && tsc --watch",
+    "prod:build": "rm -rf dist && webpack",
+    "dev:start": "wait-on dist/server.js && nodemon ./dist/server.js",
+    "dev": "concurrently \"npm run dev:build\" \"npm run dev:start\""
   },
   "engines": {
     "node": "14.x"
@@ -17,9 +24,19 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.2",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
+    "concurrently": "^10.0.3",
     "mocha": "^11.7.6",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "ts-loader": "^9.6.0",
+    "typescript": "^6.0.3",
+    "wait-on": "^9.0.10",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3",
+    "webpack-node-externals": "^3.0.0"
   }
 }

@@ -1,4 +1,4 @@
-
+import { Request, Response, NextFunction } from 'express';
 
 /**
  * Validates the headers of the request
@@ -7,7 +7,7 @@
  * @param {NextFunction} next - The next function
  * @returns {void}
  */
-function validateHeaders(req, res, next) {
+function validateHeaders(req: Request, res: Response, next: NextFunction) {
     if (!req.accepts('application/json')) {
         return res.status(406).json({
             error: 'Not Acceptable: application/json is required',
@@ -16,4 +16,4 @@ function validateHeaders(req, res, next) {
     next();
 }
 
-module.exports = validateHeaders;
+export default validateHeaders;
